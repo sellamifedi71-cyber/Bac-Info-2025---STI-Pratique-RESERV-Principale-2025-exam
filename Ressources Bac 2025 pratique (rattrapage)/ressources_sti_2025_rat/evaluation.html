@@ -1,0 +1,32 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Évaluation d'un plat d'un chef</title>
+</head>
+<body>
+<form id="f" name="f" action="" method="POST">
+ <fieldset>
+    <legend><h3>Évaluation d'un plat préparé par un chef</h3></legend>
+    <label>N° CIN du chef :</label> <input type="number">
+    <label>Dégustateur :</label>
+	<select size="1">
+			<option value="">Choisir un dégustateur</option>
+			
+			
+    </select> <br>
+    <p>Notes attribuées :</p>
+    <label>Originalité :</label>
+    <input class="note" type="number">
+    <label class="labelpageeval">Présentation  :</label>
+    <input class="note"  type="number">
+    <label class="labelpageeval">Goût :</label>
+    <input class="note" type="number"><br>
+    <span>La note obtenue =</span><span id="note"> 0 </span>
+    <div>
+        <input name="bt1" type="submit" value="Évaluer">
+        <input name="bt2" type="reset" value="Annuler">
+     </div>
+ </fieldset>
+</form>
+</body>
+</html>

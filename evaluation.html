@@ -1,0 +1,42 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Évaluation d'un plat d'un chef</title>
+   <link rel='stylesheet' type='text/css' media='screen' href='mesStyles.css'>
+    <script src='mesControles.js'></script>
+</head>
+<body>
+<form id="f" name="f" action="evaluation.php" method="POST" onsubmit="return validation()">
+ <fieldset>
+    <legend><h3>Évaluation d'un plat préparé par un chef</h3></legend>
+    
+    <label>N° CIN du chef :</label>
+     <input type="number" id="cin" name="cin">
+
+    <label>Dégustateur :</label>
+	<select size="1" id="liste" name="liste" required>
+			<option value="" selected>Choisir un dégustateur</option>
+			<option value="D01">Nada BELGACEM</option>
+      <option value="D02">Rym CHANNOUFI</option>
+      <option value="D03">Yassine TOUNSI</option>
+			
+    </select> <br>
+    <p>Notes attribuées :</p>
+    <label>Originalité :</label>
+    <input class="note" type="number" id="orig" name="orig" required value="0" min="0" max="20" oninput="moyenne()">
+
+    <label class="labelpageeval">Présentation  :</label>
+    <input class="note"  type="number" id="pres" name="pres" required value="0" min="0" max="20" oninput="moyenne()">
+
+    <label class="labelpageeval">Goût :</label>
+    <input class="note" type="number" id="gout" name="gout" required value="0" min="0" max="20" oninput="moyenne()"><br>
+
+    <span>La note obtenue =</span><span id="note"> 0 </span>
+    <div>
+        <input name="bt1" type="submit" value="Évaluer" class="btn">
+        <input name="bt2" type="reset" value="Annuler" class="btn">
+     </div>
+ </fieldset>
+</form>
+</body>
+</html>
