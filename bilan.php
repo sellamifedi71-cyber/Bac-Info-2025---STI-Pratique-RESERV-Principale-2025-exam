@@ -1,66 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>bilan</title>
-    <style>
-        tr,td,th{
-            border:double red;
-        }
-    </style>
-</head>
-<body>
-
-    <?php
-//    $conx=mysqli_connect('localhost','root','','bd773344')or die('connexion impossible');
-// ou bien
-    require('connexion.php');
-
-    echo('<table>');
-    echo('
-    <tr>
-        <th>Nom chef</th>
-        <th>Nom plat</th>
-        <th>Moyenne notes</th>
-        <th>Etat</th>
-    </tr>    
-    ');
-
-    $req1="select nomchef, nompla,AVG(note),count(*) 
-    from chef c, plat p, evaluation e
-    where c.codepla=p.codepla and c.cinchef=e.cinchef
-    group by c.cinchef
-    order by avg(note)";
-
-    $res1=mysqli_query($conx,$req1);
-
-    $req="select * from degustateur";
-    $res=mysqli_query($conx,$req);
-    $nbres=mysqli_num_rows($res);
-
-    while($tab=mysqli_fetch_array($res1))
-       // nomchef $tab[0], nompla $tab[1],AVG(note)$tab[2],count(*)$tab[3]
-        {
-            if($tab[3]==$nbres)
-                {
-                    $etat='Evaluation terminée';
-                }
-            else
-                {
-                    $etat='Evaluation en cours';
-                }
-            echo('
-            <tr>
-        <td>'.$tab[0].'</td>
-        <td>'.$tab[1].'</td>
-        <td>'.$tab[2].'</td>
-        <td>'.$etat.'</td>
-    </tr>
-            ');
-        }
-        echo('</table>');
-
-    ?>
-</body>
-</html>
+<?php
+declare(strict_types=1);
+require __DIR__ . '/connexion.php';
+$sql = 'SELECT c.cinChef, c.nomChef, p.nomPla, COALESCE(AVG(e.note), 0) AS moyenne, COUNT(e.iddeg) AS nbEval, (SELECT COUNT(*) FROM degustateur) AS totalDeg FROM chef c INNER JOIN plat p ON p.codePla = c.codePla LEFT JOIN evaluation e ON e.cinchef = c.cinChef GROUP BY c.cinChef, c.nomChef, p.nomPla ORDER BY moyenne DESC, c.nomChef ASC';
+$result = $conx->query($sql);
+?>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Bilan des évaluations</title><link rel="stylesheet" href="mesStyles.css"></head><body><main class="container"><h1>Bilan des évaluations</h1><div class="table-wrap"><table><thead><tr><th>Chef</th><th>Plat</th><th>Moyenne / 20</th><th>Évaluations reçues</th><th>État</th></tr></thead><tbody>
+<?php while ($row = $result->fetch_assoc()): $complete = (int)$row['totalDeg'] > 0 && (int)$row['nbEval'] === (int)$row['totalDeg']; ?><tr><td><?= htmlspecialchars($row['nomChef'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td><td><?= htmlspecialchars($row['nomPla'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td><td><?= number_format((float)$row['moyenne'], 2, ',', ' ') ?></td><td><?= (int)$row['nbEval'] ?> / <?= (int)$row['totalDeg'] ?></td><td><?= $complete ? 'Évaluation terminée' : 'Évaluation en cours' ?></td></tr><?php endwhile; ?>
+</tbody></table></div><p><a href="evaluation.html">Retour à l'évaluation</a></p></main></body></html>
