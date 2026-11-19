@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require __DIR__ . '/connexion.php';
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') { header('Location: evaluation.html'); exit; }
+verify_csrf();
 $cinRaw = $_POST['cin'] ?? '';
 $degRaw = $_POST['liste'] ?? '';
 if (!is_string($cinRaw) || !is_string($degRaw)) { http_response_code(422); exit('CIN ou dégustateur invalide.'); }
